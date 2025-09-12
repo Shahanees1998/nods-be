@@ -1,0 +1,44 @@
+{
+  "name": "nods",
+  "version": "1.0.0",
+  "description": "sms sending app",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "prestart": "npx prisma generate",
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "build": "npx prisma generate",
+    "vercel-build": "npm run build"
+  },
+  "author": "BasitDev",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.9.1",
+    "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
+    "cloudinary": "^2.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "googleapis": "^140.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb": "^6.1.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.13",
+    "nodemon": "^2.0.21",
+    "prisma": "^5.9.1",
+    "stripe": "^15.7.0",
+    "twilio": "^5.0.3"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "eslint": "^8.57.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1"
+  }
+}

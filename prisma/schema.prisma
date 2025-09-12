@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                     String         @id @default(auto()) @map("_id") @db.ObjectId
+  imageUrl               String?
+  username               String?
+  email                  String         @unique
+  phone                  String?        @unique
+  password               String?
+  stripeCustomerId       String?
+  defaultPaymentMethodId String?
+  cards                  Card[]
+  subscriptions          Subscription[]
+  userType               UserType       @default(User)
+  isVerified             Boolean        @default(false)
+  otp                    String?
+  otpExpires             DateTime?
+  remainingMsgs          Int            @default(25)
+  messages               Message[]
+  isDeleted              Boolean        @default(false)
+  updatedOn              DateTime?
+  createdOn              DateTime       @default(now())
+  ContactUs              ContactUs[]
+  groups                 Group[]
+  
+  // Enhanced signup fields
+  usageType              UsageType?     @default(Personal)
+  
+  // Personal use fields
+  firstName              String?
+  lastName               String?
+  personalPhone          String?
+  personalAddress        String?
+  personalCity           String?
+  personalState          String?
+  personalPostalCode     String?
+  personalCountry        String?
+  
+  // Business use fields
+  businessName           String?
+  businessAddress        String?
+  businessCity           String?
+  businessState          String?
+  businessPostalCode     String?
+  businessCountry        String?
+  businessType           BusinessType?
+  businessRegNumber      String?
+  businessRegType        String?
+  industry               String?
+  website                String?
+  regionsOfOperation     String[]
+}
+
+model Message {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String   @db.ObjectId
+  recipientName      String?
+  recipientFirstName String?
+  recipientLastName  String?
+  recipientPhone     String
+  body               String
+  sentAt             DateTime @default(now())
+  user               User     @relation(fields: [userId], references: [id])
+}
+
+model Card {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String   @db.ObjectId
+  stripeCardId String   @unique
+  last4        String
+  brand        String
+  expMonth     Int
+  expYear      Int
+  isDefault    Boolean  @default(false)
+  createdOn    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model Subscription {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String   @db.ObjectId
+  stripeSubId      String
+  status           String
+  currentPeriodEnd DateTime
+  createdOn        DateTime @default(now())
+  user             User     @relation(fields: [userId], references: [id])
+}
+
+model Product {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId   String   @unique
+  priceId     String   @unique
+  name        String
+  description String
+  price       Float
+  currency    String
+  createdOn   DateTime @default(now())
+  updatedOn   DateTime @updatedAt
+}
+
+model ContactUs {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  message   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+enum UserType {
+  User
+  Admin
+}
+
+enum UsageType {
+  Personal
+  Business
+}
+
+enum BusinessType {
+  SoleProprietorship
+  Partnership
+  Corporation
+  LLC
+  NonProfit
+  Other
+}
+
+model Group {
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String        @db.ObjectId
+  name         String
+  description  String?
+  createdOn    DateTime      @default(now())
+  updatedOn    DateTime      @updatedAt
+  user         User          @relation(fields: [userId], references: [id])
+  contacts     GroupContact[]
+}
+
+model GroupContact {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  groupId      String   @db.ObjectId
+  name         String
+  firstName    String?
+  lastName     String?
+  phone        String
+  email        String?
+  company      String?
+  website      String?
+  createdOn    DateTime @default(now())
+  group        Group    @relation(fields: [groupId], references: [id])
+  
+  @@unique([groupId, phone])
+}
