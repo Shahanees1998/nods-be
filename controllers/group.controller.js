@@ -47,9 +47,9 @@ export const createGroup = async (req, res) => {
       }
     })
 
-    res.status(201).json({ 
-      message: 'Group created successfully', 
-      group: completeGroup 
+    res.status(201).json({
+      message: 'Group created successfully',
+      group: completeGroup
     })
   } catch (error) {
     console.error('Failed to create group:', error)
@@ -84,7 +84,7 @@ export const getGroup = async (req, res) => {
 
   try {
     const group = await prisma.group.findFirst({
-      where: { 
+      where: {
         id: groupId,
         userId
       },
@@ -117,7 +117,7 @@ export const updateGroup = async (req, res) => {
   try {
     // Check if group belongs to user
     const existingGroup = await prisma.group.findFirst({
-      where: { 
+      where: {
         id: groupId,
         userId
       }
@@ -135,9 +135,9 @@ export const updateGroup = async (req, res) => {
       }
     })
 
-    res.status(200).json({ 
-      message: 'Group updated successfully', 
-      group: updatedGroup 
+    res.status(200).json({
+      message: 'Group updated successfully',
+      group: updatedGroup
     })
   } catch (error) {
     console.error('Failed to update group:', error)
@@ -153,7 +153,7 @@ export const deleteGroup = async (req, res) => {
   try {
     // Check if group belongs to user
     const existingGroup = await prisma.group.findFirst({
-      where: { 
+      where: {
         id: groupId,
         userId
       }
@@ -193,7 +193,7 @@ export const addContactsToGroup = async (req, res) => {
   try {
     // Check if group belongs to user
     const existingGroup = await prisma.group.findFirst({
-      where: { 
+      where: {
         id: groupId,
         userId
       }
@@ -229,9 +229,9 @@ export const addContactsToGroup = async (req, res) => {
       }
     }
 
-    res.status(200).json({ 
+    res.status(200).json({
       message: `${addedContacts.length} contacts added to group successfully`,
-      addedContacts 
+      addedContacts
     })
   } catch (error) {
     console.error('Failed to add contacts to group:', error)
@@ -247,7 +247,7 @@ export const removeContactFromGroup = async (req, res) => {
   try {
     // Check if group belongs to user
     const existingGroup = await prisma.group.findFirst({
-      where: { 
+      where: {
         id: groupId,
         userId
       }
@@ -262,9 +262,9 @@ export const removeContactFromGroup = async (req, res) => {
       where: { id: contactId }
     })
 
-    res.status(200).json({ 
+    res.status(200).json({
       message: 'Contact removed from group successfully',
-      deletedContact 
+      deletedContact
     })
   } catch (error) {
     console.error('Failed to remove contact from group:', error)

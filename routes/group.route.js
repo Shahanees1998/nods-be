@@ -1,6 +1,6 @@
 import express from 'express'
 import { verifyToken } from '../middleware/jwt.js'
-import { 
+import {
   createGroup,
   getUserGroups,
   getGroup,

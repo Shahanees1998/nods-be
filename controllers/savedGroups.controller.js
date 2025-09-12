@@ -5,11 +5,11 @@ export const createSavedGroup = async (req, res) => {
   console.log('🚀 CREATE_SAVED_GROUP API called')
   console.log('📝 Request body:', req.body)
   console.log('🔑 Request headers:', req.headers)
-  
+
   const { name, description, contacts } = req.body
   // Temporarily use a default userId for testing
   const userId = req.user?.userId || 'test-user-id'
-  
+
   console.log('👤 User ID:', userId)
   console.log('📋 Group name:', name)
   console.log('📝 Description:', description)
@@ -41,15 +41,15 @@ export const createSavedGroup = async (req, res) => {
     })
 
     console.log('✅ Saved group created successfully:', savedGroup)
-    res.status(201).json({ 
-      message: 'Saved group created successfully', 
-      data: savedGroup 
+    res.status(201).json({
+      message: 'Saved group created successfully',
+      data: savedGroup
     })
   } catch (error) {
     console.log('❌ Error creating saved group:', error.message)
-    res.status(500).json({ 
-      message: 'Error creating saved group', 
-      error: error.message 
+    res.status(500).json({
+      message: 'Error creating saved group',
+      error: error.message
     })
   }
 }
@@ -58,10 +58,10 @@ export const createSavedGroup = async (req, res) => {
 export const getSavedGroups = async (req, res) => {
   console.log('🚀 GET_SAVED_GROUPS API called')
   console.log('🔑 Request headers:', req.headers)
-  
+
   // Temporarily use a default userId for testing
   const userId = req.user?.userId || 'test-user-id'
-  
+
   console.log('👤 User ID:', userId)
 
   try {
@@ -78,16 +78,16 @@ export const getSavedGroups = async (req, res) => {
 
     console.log('✅ Found saved groups:', savedGroups.length)
     console.log('📋 Groups data:', savedGroups)
-    
-    res.status(200).json({ 
-      message: 'Saved groups retrieved successfully', 
-      data: savedGroups 
+
+    res.status(200).json({
+      message: 'Saved groups retrieved successfully',
+      data: savedGroups
     })
   } catch (error) {
     console.log('❌ Error retrieving saved groups:', error.message)
-    res.status(500).json({ 
-      message: 'Error retrieving saved groups', 
-      error: error.message 
+    res.status(500).json({
+      message: 'Error retrieving saved groups',
+      error: error.message
     })
   }
 }
@@ -123,14 +123,14 @@ export const updateSavedGroup = async (req, res) => {
       }
     })
 
-    res.status(200).json({ 
-      message: 'Saved group updated successfully', 
-      data: updatedGroup 
+    res.status(200).json({
+      message: 'Saved group updated successfully',
+      data: updatedGroup
     })
   } catch (error) {
-    res.status(500).json({ 
-      message: 'Error updating saved group', 
-      error: error.message 
+    res.status(500).json({
+      message: 'Error updating saved group',
+      error: error.message
     })
   }
 }
@@ -157,9 +157,9 @@ export const deleteSavedGroup = async (req, res) => {
 
     res.status(200).json({ message: 'Saved group deleted successfully' })
   } catch (error) {
-    res.status(500).json({ 
-      message: 'Error deleting saved group', 
-      error: error.message 
+    res.status(500).json({
+      message: 'Error deleting saved group',
+      error: error.message
     })
   }
 }
@@ -193,14 +193,14 @@ export const addContactToGroup = async (req, res) => {
       }
     })
 
-    res.status(201).json({ 
-      message: 'Contact added to group successfully', 
-      data: contact 
+    res.status(201).json({
+      message: 'Contact added to group successfully',
+      data: contact
     })
   } catch (error) {
-    res.status(500).json({ 
-      message: 'Error adding contact to group', 
-      error: error.message 
+    res.status(500).json({
+      message: 'Error adding contact to group',
+      error: error.message
     })
   }
 }
@@ -235,10 +235,9 @@ export const removeContactFromGroup = async (req, res) => {
 
     res.status(200).json({ message: 'Contact removed from group successfully' })
   } catch (error) {
-    res.status(500).json({ 
-      message: 'Error removing contact from group', 
-      error: error.message 
+    res.status(500).json({
+      message: 'Error removing contact from group',
+      error: error.message
     })
   }
 }
-

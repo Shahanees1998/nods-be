@@ -6,10 +6,10 @@ import { generateOTP, verifyOTP } from '../utils/otp.util.js'
 import bcrypt from 'bcrypt'
 
 export const register = async (req, res) => {
-  const { 
-    username, 
-    email, 
-    password, 
+  const {
+    username,
+    email,
+    password,
     usageType,
     // Personal use fields
     firstName,
@@ -42,14 +42,14 @@ export const register = async (req, res) => {
   // Validate required fields based on usage type
   if (usageType === 'Personal') {
     if (!firstName || !lastName || !personalPhone) {
-      return res.status(400).json({ 
-        message: 'For personal use, first name, last name, and phone number are required' 
+      return res.status(400).json({
+        message: 'For personal use, first name, last name, and phone number are required'
       })
     }
   } else if (usageType === 'Business') {
     if (!businessName || !businessType || !industry) {
-      return res.status(400).json({ 
-        message: 'For business use, business name, business type, and industry are required' 
+      return res.status(400).json({
+        message: 'For business use, business name, business type, and industry are required'
       })
     }
   }
@@ -109,10 +109,10 @@ export const register = async (req, res) => {
 
     await sendOTPEmail(email, otp)
 
-    res.status(201).json({ 
-      message: 'User registered and OTP sent successfully', 
+    res.status(201).json({
+      message: 'User registered and OTP sent successfully',
       userId: user.id,
-      usageType: user.usageType 
+      usageType: user.usageType
     })
   } catch (error) {
     res.status(500).json({ message: 'Error registering user', error: error.message })

@@ -90,7 +90,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 // Helper function to format phone numbers
 const formatPhoneNumber = (phone) => {
   // Remove any spaces, dashes, or other formatting
-  let cleanPhone = phone.replace(/[\s\-\(\)]/g, '')
+  const cleanPhone = phone.replace(/[\s\-()]/g, '')
 
   // If it starts with +, it's already international format
   if (cleanPhone.startsWith('+')) {
@@ -156,7 +156,7 @@ export const sendMessage = async (req, res) => {
         console.log(`Sending to: ${phone} → ${formattedPhone}`)
 
         // Send SMS via Twilio
-        const twilioResult = await twilioClient.messages.create({
+        await twilioClient.messages.create({
           body: personalizedMessage,
           from: process.env.TWILIO_PHONE_NUMBER,
           to: formattedPhone
@@ -415,7 +415,7 @@ export const sendMessageToGroup = async (req, res) => {
         console.log(`Sending to: ${phone} → ${formattedPhone}`)
 
         // Send SMS via Twilio
-        const twilioResult = await twilioClient.messages.create({
+        await twilioClient.messages.create({
           body: personalizedMessage,
           from: process.env.TWILIO_PHONE_NUMBER,
           to: formattedPhone
