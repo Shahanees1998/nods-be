@@ -1,7 +1,7 @@
 import prisma from '../lib/prismadb.js'
 import { sendOTPEmail } from '../utils/email.util.js'
 import { generateJwtToken } from '../utils/jwt.util.js'
-import { generateOTP, verifyOTP } from '../utils/otp.util.js'
+import { generateOTP } from '../utils/otp.util.js'
 
 import bcrypt from 'bcrypt'
 
@@ -97,20 +97,12 @@ export const register = async (req, res) => {
       })
     }
 
-    let user = await prisma.user.create({
+    const user = await prisma.user.create({
       data: userData
     })
 
-    const { otp, otpExpires } = generateOTP()
-    user = await prisma.user.update({
-      where: { email },
-      data: { otp, otpExpires }
-    })
-
-    await sendOTPEmail(email, otp)
-
     res.status(201).json({
-      message: 'User registered and OTP sent successfully',
+      message: 'User registered successfully',
       userId: user.id,
       usageType: user.usageType
     })
@@ -145,15 +137,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: 'Invalid password' })
     }
 
-    const { otp, otpExpires } = generateOTP()
-    await prisma.user.update({
-      where: { email },
-      data: { otp, otpExpires }
-    })
-
-    await sendOTPEmail(email, otp)
-
-    res.status(200).json({ message: 'OTP sent successfully', userId: user.id })
+    res.status(200).json({ message: 'Login successful', userId: user.id })
   } catch (error) {
     res.status(500).json({ message: 'Error logging in', error: error.message })
   }
@@ -167,27 +151,21 @@ export const verifyUserOtp = async (req, res) => {
   }
 
   try {
-    if (email === 'testuser1999@gmail.com' && otp === '112233') {
-      const user = await prisma.user.findUnique({ where: { email } })
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' })
-      }
-      const token = generateJwtToken({ email: user.email, userId: user.id })
+    const user = await prisma.user.findUnique({ where: { email } })
 
-      return res.status(200).json({ message: 'OTP verified successfully', token, user })
-    } else if (email === 'testuser1999@gmail.com' && otp !== '112233') {
-      return res.status(400).json({ message: 'Invalid OTP for test user' })
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
     }
 
-    const { isValid, userId, user } = await verifyOTP(email, otp)
+    // Accept any OTP — no send/verify against stored value
+    await prisma.user.update({
+      where: { email },
+      data: { otp: null, otpExpires: null, isVerified: true }
+    })
 
-    if (isValid) {
-      const token = generateJwtToken({ email, userId })
+    const token = generateJwtToken({ email: user.email, userId: user.id })
 
-      res.status(200).json({ message: 'OTP verified successfully', token, user })
-    } else {
-      res.status(400).json({ message: 'Invalid OTP or OTP expired' })
-    }
+    res.status(200).json({ message: 'OTP verified successfully', token, user })
   } catch (error) {
     res.status(500).json({ message: 'Error verifying OTP', error: error.message })
   }
